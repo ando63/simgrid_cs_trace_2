@@ -1,20 +1,11 @@
 import numpy as np
-import argparse
+
 
 def random_split(seed, num_parts):
-    # シード値を設定
     np.random.seed(seed)
-    
-    # 0から1までのランダムな値を生成
     random_values = np.random.rand(num_parts - 1)
-    
-    # 生成したランダムな値をソート
     random_values.sort()
-    
-    # 最初の値を0, 最後の値を1に追加して、区間を作成
     intervals = np.concatenate([[0], random_values, [1]])
-    
-    # 各区間の幅を計算して1を8分割
     splits = np.diff(intervals)
     
     return splits
@@ -27,10 +18,8 @@ def generate_probability_matrix(size, seed):
     
     return matrix
 
-# traffic行列の生成方法を合成トラフィック既存の考え方をもとにどんどんdefしていく
-
 def generate_probability_matrix_bitcomplement():
-    matrix = [
+    matrix = np.array([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
@@ -47,12 +36,12 @@ def generate_probability_matrix_bitcomplement():
     [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-    matrix /= matrix.sum(axis=1, keepdims=True)
+    ])
+    #matrix2 /= matrix2.sum(axis=1, keepdims=True)
     return matrix
 
 def generate_probability_matrix_bitreverse():
-    matrix = [
+    matrix = np.array([
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -69,12 +58,12 @@ def generate_probability_matrix_bitreverse():
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
-    ]
-    matrix /= matrix.sum(axis=1, keepdims=True)
+    ])
+    #matrix /= matrix.sum(axis=1, keepdims=True)
     return matrix
 
 def generate_probability_matrix_shuffle():
-    matrix = [
+    matrix = np.array([
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -91,12 +80,12 @@ def generate_probability_matrix_shuffle():
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
-    ]
-    matrix /= matrix.sum(axis=1, keepdims=True)
+    ])
+    #matrix /= matrix.sum(axis=1, keepdims=True)
     return matrix
 
 def generate_probability_matrix_bitrotation():
-    matrix = [
+    matrix = np.array([
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
     [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -113,12 +102,12 @@ def generate_probability_matrix_bitrotation():
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
     [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
-    ]
-    matrix /= matrix.sum(axis=1, keepdims=True)
+    ])
+    #matrix /= matrix.sum(axis=1, keepdims=True)
     return matrix
 
 def generate_probability_matrix_transpose():
-    matrix = [
+    matrix = np.array([
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
@@ -135,12 +124,12 @@ def generate_probability_matrix_transpose():
     [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
-    ]
-    matrix /= matrix.sum(axis=1, keepdims=True)
+    ])
+    #matrix /= matrix.sum(axis=1, keepdims=True)
     return matrix
 
 def generate_probability_matrix_neighbor():
-    matrix = [
+    matrix = np.array([
     [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -157,12 +146,12 @@ def generate_probability_matrix_neighbor():
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-    matrix /= matrix.sum(axis=1, keepdims=True)
+    ])
+    #matrix /= matrix.sum(axis=1, keepdims=True)
     return matrix
 
 def generate_probability_matrix_tornado():
-    matrix = [
+    matrix = np.array([
     [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
@@ -179,11 +168,9 @@ def generate_probability_matrix_tornado():
     [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-    matrix /= matrix.sum(axis=1, keepdims=True)
+    ])
+    #matrix /= matrix.sum(axis=1, keepdims=True)
     return matrix
-
-# main で以上の行列（ランダムを含む）をランダムな割合で混ぜ合わせる
 
 if __name__ == "__main__":
     #parser = argparse.ArgumentParser(description='get matrix size')
@@ -198,15 +185,18 @@ if __name__ == "__main__":
     for i in range(1,11):
         seed = i
         mat1 = generate_probability_matrix(size, seed)
-        mat2 = generate_probability_matrix_bitcomplement
-        mat3 = generate_probability_matrix_bitreverse
-        mat4 = generate_probability_matrix_bitrotation
-        mat5 = generate_probability_matrix_neighbor
-        mat6 = generate_probability_matrix_shuffle
-        mat7 = generate_probability_matrix_tornado
-        mat8 = generate_probability_matrix_transpose
+        mat2 = generate_probability_matrix_bitcomplement()
+        mat3 = generate_probability_matrix_bitreverse()
+        mat4 = generate_probability_matrix_bitrotation()
+        mat5 = generate_probability_matrix_neighbor()
+        mat6 = generate_probability_matrix_shuffle()
+        mat7 = generate_probability_matrix_tornado()
+        mat8 = generate_probability_matrix_transpose()
         split = random_split(seed,8)
-        mat = split[0] * mat1 + split[1] * mat2 + split[2] * mat3 + split[3] * mat4 + split[4] * mat5 + split[5] * mat6 + split[6] * mat7 + split[7] * mat8
+        print(mat1)
+        print(np.sum(mat1))
+        mat =  split[0] * mat1 + split[1] * mat2 + split[2] * mat3 + split[3] * mat4 + split[4] * mat5 + split[5] * mat6 + split[6] * mat7 + split[7] * mat8
         mat /= mat.sum(axis=1, keepdims=True)
+        print(np.sum(mat))
         outf = "matrix_{}_{}.txt".format(size, seed)
         np.savetxt(outf, mat, fmt="%f", delimiter="\t")
