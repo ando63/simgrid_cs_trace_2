@@ -5,6 +5,6 @@ RR:
  bw: 100
  lat: 50
 cs:
- bw: 100
+ bw: 1000
  lat: 50
  
