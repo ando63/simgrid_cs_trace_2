@@ -182,7 +182,7 @@ if __name__ == "__main__":
 
     size = 16
 
-    for i in range(1,1001):
+    for i in range(1,2001):
         seed = i
         mat1 = generate_probability_matrix(size, seed)
         mat2 = generate_probability_matrix_bitcomplement()
