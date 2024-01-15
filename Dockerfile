@@ -10,7 +10,7 @@ RUN cmake -DCMAKE_INSTALL_PREFIX=/opt/simgrid .
 RUN make -j8
 RUN make install
 
-RUN pip3 install networkx numpy pyyaml
+RUN pip3 install networkx numpy pyyaml torch
 
 ENV PATH /opt/simgrid/bin/:$PATH
 WORKDIR /root/workspace
