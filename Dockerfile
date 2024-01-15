@@ -10,7 +10,7 @@ RUN cmake -DCMAKE_INSTALL_PREFIX=/opt/simgrid .
 RUN make -j8
 RUN make install
 
-RUN pip3 install networkx numpy pyyaml torch torchvision matplotlib
+RUN pip3 install networkx numpy pyyaml torch torchvision matplotlib pandas
 
 ENV PATH /opt/simgrid/bin/:$PATH
 WORKDIR /root/workspace
