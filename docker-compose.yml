@@ -6,4 +6,7 @@ services:
     tty: true
     volumes:
       - .:/root/workspace:cached
-    cpus: "1"
+    deploy:
+      resource:
+        limits:
+          cpus: "1"
