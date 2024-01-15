@@ -6,3 +6,4 @@ services:
     tty: true
     volumes:
       - .:/root/workspace:cached
+    cpus: "1"
