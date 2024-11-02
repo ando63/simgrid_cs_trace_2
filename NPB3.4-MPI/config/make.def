@@ -14,6 +14,6 @@ CLINKFLAGS = -O -L${SIMGRID_PATH}/lib
 #CLINKFLAGS = -L${SIMGRID_PATH}/lib
 FLINK   = $(MPIF77)
 CLINK   = $(MPICC)
-CC      = cc -g
+CC      = /usr/bin/cc -g
 BINDIR  = ../bin
 RAND   = randi8
