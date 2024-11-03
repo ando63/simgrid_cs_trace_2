@@ -1,7 +1,7 @@
 #SIMGRID_PATH=/usr
 SIMGRID_PATH=/opt/simgrid
 MPIF77 = ${SIMGRID_PATH}/bin/smpiff
-MPIFC = ${SIMGRID_RATH}/bin/smpif90
+MPIFC = ${SIMGRID_PATH}/bin/smpif90
 FMPI_LIB  =  -lsimgrid -lgfortran #-lsmpi -lgras
 FMPI_INC = -I${SIMGRID_PATH}/include/smpi/
 FFLAGS  = -O
