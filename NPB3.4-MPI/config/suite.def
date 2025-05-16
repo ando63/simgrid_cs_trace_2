@@ -1,5 +1,14 @@
-bt	S  8
-bt	A  8
-bt	B  8
-bt	C  8
-bt	D  8
+bt	S
+bt	A
+bt	B
+bt	C
+bt	D
+ft	S  16
+mg	S  16
+sp	S  16
+lu	S  16
+bt	S  16
+is	S  16
+ep	S  16
+cg	S  16
+dt	S  16
