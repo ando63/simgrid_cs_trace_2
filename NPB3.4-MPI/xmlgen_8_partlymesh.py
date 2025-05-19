@@ -8,7 +8,6 @@ header = """<?xml version='1.0'?>
   <!--  Negative values enable auto-select... -->
   <prop id='contexts/nthreads' value='1'/>
   <!--  Power of the executing computer in Flop per seconds. Used for extrapolating tasks execution time by SMPI [default is 20000]-->
-  <prop id='smpi/running_power' value='50000000000.0'/>
   <!--  Display simulated timing at the end of simulation -->
   <prop id='smpi/display-timing' value='1'/>
   <prop id='cpu/optim' value='Lazy'/>
