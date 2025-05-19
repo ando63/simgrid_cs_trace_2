@@ -1732,7 +1732,8 @@ c---------------------------------------------------------------------
       integer i, d1, d2, d3
       double complex u1(d1, d2, d3)
       integer j, q,r,s, ierr
-      double complex chk,allchk
+      complex(8) chk, allchk
+!      double complex chk,allchk
       chk = (0.0,0.0)
 
       do j=1,1024
