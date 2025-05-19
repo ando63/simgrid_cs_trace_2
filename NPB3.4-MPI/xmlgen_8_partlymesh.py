@@ -14,7 +14,7 @@ header = """<?xml version='1.0'?>
   <prop id='cpu/optim' value='Lazy'/>
   <prop id='network/optim' value='Lazy'/>
   <prop id='smpi/coll-selector' value='mvapich2'/>
-  <prop id='smpi/cpu_threshold' value='0.00000001'/>
+  <prop id='smpi/cpu-threshold' value='0.00000001'/>
  </config>
  <AS id='AS0' routing='Floyd'>
 """
