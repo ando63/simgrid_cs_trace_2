@@ -11,6 +11,8 @@ RUN cmake -DCMAKE_INSTALL_PREFIX=/opt/simgrid .
 RUN make -j8
 RUN make install
 
+RUN pip3 install --upgrade pip setuptools
+
 RUN pip3 install networkx numpy pyyaml torch torchvision matplotlib pandas openpyxl line_profiler
 
 ENV PATH /opt/simgrid/bin/:$PATH
