@@ -360,11 +360,15 @@ c---------------------------------------------------------------------
       call MPI_Comm_size(MPI_COMM_WORLD, np, ierr)
       call MPI_Comm_rank(MPI_COMM_WORLD, me, ierr)
 
+      convertdouble = .false.
+
       if (.not. convertdouble) then
          dc_type = MPI_DOUBLE_COMPLEX
       else
          dc_type = MPI_COMPLEX
       endif
+
+      
 
 
       if (me .eq. 0) then
@@ -1732,7 +1736,7 @@ c---------------------------------------------------------------------
       integer i, d1, d2, d3
       double complex u1(d1, d2, d3)
       integer j, q,r,s, ierr
-!      complex(8) chk, allchk
+      complex(8) chk, allchk
 !      double complex chk,allchk
       chk = (0.0,0.0)
 
