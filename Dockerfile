@@ -13,7 +13,7 @@ RUN make install
 
 RUN pip3 install --upgrade pip setuptools
 
-RUN pip3 install networkx numpy pyyaml torch torchvision matplotlib pandas openpyxl line_profiler wx
+RUN pip3 install networkx numpy pyyaml torch torchvision matplotlib pandas openpyxl line_profiler
 
 ENV PATH /opt/simgrid/bin/:$PATH
 WORKDIR /root/workspace
