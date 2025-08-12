@@ -11,7 +11,7 @@ grid
 # tkinter._test()
 import networkx as nx
 import matplotlib
-matplotlib.use('Qt5Agg')
+# matplotlib.use('Qt5Agg')
 # import matplotlib
 # matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
@@ -2942,7 +2942,9 @@ def simulation_main():
     fig_gantt.savefig('gantt_chart.png', dpi=300, bbox_inches='tight') # 例: fig変数にFigureが格納されているとして
     plt.close(fig_gantt) # オプション: 保存後、このFigureを閉じてメモリを解放
 
-    plt.show()
+    anim.save('animation.gif', writer='pillow', fps=20, dpi=100)
+
+    # plt.show()
 
     print("Node-based Gantt Chart script finished.")
     print(len(time_traffic_list))
