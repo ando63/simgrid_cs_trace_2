@@ -20,6 +20,7 @@ import pandas as pd
 # archive = "SDSC-Par-1995-3.1-cln.swf"
 # archive = "LANL-CM5-1994-4.1-cln.swf"
 archive = "workloads/UniLu-Gaia-2014-2.swf"
+archive = "workloads/ANL_2.swf"
 
 names = ["Job Number",
          "Submit Time",
