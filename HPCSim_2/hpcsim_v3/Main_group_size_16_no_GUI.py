@@ -277,10 +277,27 @@ def initialize_all_jobs_list():
         pattern = re.compile(rf"flatten_matrix_(\w+)_A_{np_val}\.csv")
         benchmarks = []
         target_dir = "hpcsim_v3/traf_mat_flatten"
+
+        try:
+            files_in_dir = os.listdir(target_dir)
+            print(f"Target directory '{target_dir}' contains the following files:")
+            for f in files_in_dir:
+                print(f"  - {f}")
+            print("-" * 20)
+        except FileNotFoundError:
+            print(f"Error: The directory '{target_dir}' was not found.")
+            files_in_dir = []
+        
         for file in os.listdir(target_dir):
             match = pattern.match(file)
             if match:
                 benchmarks.append(match.group(1))
+
+        print(f"np_val: {np_val}")
+        print(f"Regex pattern: {pattern.pattern}")
+        print(f"Found benchmarks: {benchmarks}")
+        print("-" * 20)
+        
         selected_benchmark = random.choice(benchmarks)
         selected_file = f"{target_dir}/flatten_matrix_{selected_benchmark}_A_{np_val}.csv"
 
