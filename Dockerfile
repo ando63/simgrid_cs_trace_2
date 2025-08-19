@@ -24,7 +24,7 @@ COPY gurobi12.0.3_linux64.tar.gz /tmp/
 RUN cd /tmp \
     && tar xvfz gurobi12.0.3_linux64.tar.gz \
     && rm gurobi12.0.3_linux64.tar.gz \
-    && mv gurobi1203/linux64 /opt/gurobi1203
+    && mv gurobi1203 /opt/
 
 # Gurobiの環境変数を設定
 ENV GUROBI_HOME="/opt/gurobi1203/linux64"
@@ -32,7 +32,7 @@ ENV PATH="${GUROBI_HOME}/bin:${PATH}"
 ENV LD_LIBRARY_PATH="${GUROBI_HOME}/lib:${LD_LIBRARY_PATH}"
 
 # PythonのGurobiライブラリをインストール
-RUN pip3 install "${GUROBI_HOME}/python/gurobipy"
+RUN cd "${GUROBI_HOME}/python" && pip3 install .
 
 # Gurobiのライセンスファイルをコンテナ内にコピー
 # このライセンスファイルは、ローカルPCの適切な場所に配置しておく必要があります
