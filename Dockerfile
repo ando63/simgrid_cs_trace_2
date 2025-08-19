@@ -24,7 +24,7 @@ COPY gurobi12.0.3_linux64.tar.gz /tmp/
 RUN cd /tmp \
     && tar xvfz gurobi12.0.3_linux64.tar.gz \
     && rm gurobi12.0.3_linux64.tar.gz \
-    && /tmp/gurobi1203/linux64/install.sh -f /opt/gurobi1203
+    && mv gurobi1203/linux64 /opt/gurobi1203
 
 # Gurobiの環境変数を設定
 ENV GUROBI_HOME="/opt/gurobi1203/linux64"
