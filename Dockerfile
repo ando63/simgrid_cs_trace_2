@@ -36,6 +36,7 @@ RUN mkdir -p /opt/gurobi1203 && tar xvfz /tmp/gurobi12.0.3_linux64.tar.gz --dire
     && rm /tmp/gurobi12.0.3_linux64.tar.gz
 
 # Gurobiの環境変数を設定
+# tarコマンドで展開した結果、パスが二重になっているため修正
 ENV GUROBI_HOME="/opt/gurobi1203/gurobi1203/linux64"
 ENV PATH="${GUROBI_HOME}/bin:${PATH}"
 ENV LD_LIBRARY_PATH="${GUROBI_HOME}/lib:${LD_LIBRARY_PATH}"
