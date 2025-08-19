@@ -1,6 +1,23 @@
+# =========================================================================
+# Gurobiのファイルを展開するための一時的なビルドステージ
+# =========================================================================
+FROM ubuntu:22.04 as gurobi_builder
+WORKDIR /tmp
+COPY gurobi12.0.3_linux64.tar.gz .
+RUN tar xvfz gurobi12.0.3_linux64.tar.gz
+
+
+# =========================================================================
+# メインのビルドステージ
+# =========================================================================
 FROM ubuntu:22.04
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get -y install --no-install-recommends g++ clang python3 cmake libboost-dev libboost-context-dev doxygen gfortran make perl python3-pip mpich libxcb-xinerama0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xkb1 libxkbcommon-x11-0 libfontconfig1 libgl1-mesa-glx libdbus-1-dev tar gzip unzip bash
-RUN apt-get update && apt-get install -y vim
+# apt-get のインストールとキャッシュクリーンアップを一つのRUNコマンドにまとめる
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get -y install --no-install-recommends \
+    g++ clang python3 cmake libboost-dev libboost-context-dev doxygen gfortran make perl python3-pip mpich \
+    libxcb-xinerama0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
+    libxcb-xkb1 libxkbcommon-x11-0 libfontconfig1 libgl1-mesa-glx libdbus-1-dev \
+    tar gzip unzip vim bash \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /root/simgrid_inst
 RUN mkdir /root/simgrid_inst/simgrid-v3.35
@@ -18,13 +35,11 @@ RUN pip3 install networkx numpy pyyaml torch torchvision matplotlib pandas openp
 ENV PATH /opt/simgrid/bin/:$PATH
 WORKDIR /root/workspace
 
-COPY gurobi12.0.3_linux64.tar.gz /tmp/
-
-# Gurobiをインストール
-RUN cd /tmp \
-    && tar xvfz gurobi12.0.3_linux64.tar.gz \
-    && rm gurobi12.0.3_linux64.tar.gz \
-    && mv gurobi1203 /opt/
+# =========================================================================
+# Gurobiのインストールセクション
+# =========================================================================
+# 前のステージからGurobiの展開済みファイルをコピー
+COPY --from=gurobi_builder /tmp/gurobi1203 /opt/gurobi1203
 
 # Gurobiの環境変数を設定
 ENV GUROBI_HOME="/opt/gurobi1203/linux64"
@@ -32,8 +47,12 @@ ENV PATH="${GUROBI_HOME}/bin:${PATH}"
 ENV LD_LIBRARY_PATH="${GUROBI_HOME}/lib:${LD_LIBRARY_PATH}"
 
 # PythonのGurobiライブラリをインストール
+# ディレクトリに移動してからインストールすることで、pipが正しく認識できるようにする
 RUN cd "${GUROBI_HOME}/python" && pip3 install .
 
 # Gurobiのライセンスファイルをコンテナ内にコピー
 # このライセンスファイルは、ローカルPCの適切な場所に配置しておく必要があります
 COPY gurobi.lic /opt/gurobi1203/linux64/
+
+# Gurobiのインストールが完了
+# =========================================================================
