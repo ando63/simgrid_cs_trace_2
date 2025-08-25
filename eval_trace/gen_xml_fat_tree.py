@@ -39,7 +39,7 @@ def gen_fat_tree():
     return G_fat_tree
 
 def gen_xml_meshcs(link_yaml, xml_dir):
-    G_fat_tree = gen_fat_tree(dim)
+    G_fat_tree = gen_fat_tree()
     # print(G_mesh.edges)
 
     # G_cs = nx.read_edgelist(os.path.join(cs_dir, cs_file), nodetype=int, data=False)
