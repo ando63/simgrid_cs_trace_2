@@ -21,7 +21,7 @@ RUN pip3 install --upgrade pip setuptools
 RUN pip3 install networkx numpy pyyaml torch torchvision matplotlib pandas openpyxl line_profiler PyQt5
 
 ENV PATH /opt/simgrid/bin/:$PATH
-WORKDIR /root/workspace
+# WORKDIR /root/workspace
 
 # =========================================================================
 # Gurobiのインストールセクション
@@ -43,3 +43,4 @@ RUN pip install gurobipy
 
 # Gurobiのインストールが完了
 # =========================================================================
+WORKDIR /root/workspace
