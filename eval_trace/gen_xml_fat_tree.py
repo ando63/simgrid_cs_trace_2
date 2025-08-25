@@ -70,7 +70,7 @@ def gen_xml_meshcs(link_yaml, xml_dir):
         f.write(xml_head)
         for i in range(n_nodes):
             f.write("    <host id=\"host{}\" speed=\"{}Gf\"/>\n".format(i, host_speed))
-        for i in range(n_nodes):
+        for i in range(n_routers):
             f.write("    <router id=\"router{}\"/>\n".format(i))
 
         for i in range(n_nodes):
