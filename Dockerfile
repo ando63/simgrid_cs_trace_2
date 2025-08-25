@@ -28,26 +28,18 @@ WORKDIR /root/workspace
 # =========================================================================
 # Gurobiのインストーラ（gurobi12.0.3_linux64.tar.gz）をコンテナ内にコピー
 # ローカルのPCにgurobiのインストーラをダウンロードしておく必要があります
-COPY gurobi12.0.3_linux64.tar.gz /tmp/
+COPY gurobi1203/ /opt/gurobi1203/
 
-# Gurobiのファイルを直接目的のディレクトリに展開する
-# mkdirでディレクトリを作成し、tar --directoryで直接展開
-RUN mkdir -p /opt/gurobi1203 && tar xvfz /tmp/gurobi12.0.3_linux64.tar.gz --directory /opt/gurobi1203 \
-    && rm /tmp/gurobi12.0.3_linux64.tar.gz
-
-# Gurobiの環境変数を設定
-# tarコマンドで展開した結果、パスが二重になっているため修正
-ENV GUROBI_HOME="/opt/gurobi1203/gurobi1203/linux64"
+ENV GUROBI_HOME="/opt/gurobi1203/linux64"
 ENV PATH="${GUROBI_HOME}/bin:${PATH}"
 ENV LD_LIBRARY_PATH="${GUROBI_HOME}/lib:${LD_LIBRARY_PATH}"
 
 # PythonのGurobiライブラリをインストール
 # ディレクトリに移動してからインストールすることで、pipが正しく認識できるようにする
-RUN cd "${GUROBI_HOME}/python" && pip3 install .
+RUN pip install gurobipy
 
 # Gurobiのライセンスファイルをコンテナ内にコピー
 # このライセンスファイルは、ローカルPCの適切な場所に配置しておく必要があります
-COPY gurobi.lic /opt/gurobi1203/gurobi1203/linux64/
 
 # Gurobiのインストールが完了
 # =========================================================================
