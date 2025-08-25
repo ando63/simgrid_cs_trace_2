@@ -63,7 +63,7 @@ def gen_xml_meshcs(link_yaml, xml_dir):
 
     # print(HR_bw)
   
-    outf = os.path.join(xml_dir, "{}_{}mesh_{}.xml".format(link_yaml, "fat_tree", cs_file))
+    outf = os.path.join(xml_dir, "{}_{}mesh_{}.xml".format(link_yaml, "fat_tree", "cs_file"))
     # outf = os.path.join(xml_dir, "{}_{}mesh_{}.xml".format(link_yaml, "x".join(map(str, dim)), cs_file))
     # print(outf)
     with open(outf, mode="w") as f:
