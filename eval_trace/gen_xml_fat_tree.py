@@ -38,7 +38,7 @@ def gen_fat_tree():
         G_fat_tree.add_edge(i,68)
     return G_fat_tree
 
-def gen_xml_meshcs(cs_file, link_yaml, dim, cs_dir, xml_dir):
+def gen_xml_meshcs(link_yaml, xml_dir):
     G_fat_tree = gen_fat_tree(dim)
     # print(G_mesh.edges)
 
@@ -88,18 +88,18 @@ def gen_xml_meshcs(cs_file, link_yaml, dim, cs_dir, xml_dir):
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='get xml config')
-    parser.add_argument("cs_file", type=str, help="cs edgefile")
+    # parser.add_argument("cs_file", type=str, help="cs edgefile")
     parser.add_argument("link_yaml", type=str, help="link config yaml")
-    parser.add_argument("cs_dir", type=str, help="directory for load cs/yaml")
+    # parser.add_argument("cs_dir", type=str, help="directory for load cs/yaml")
     parser.add_argument("xml_dir", type=str, help="directory for save xml")
-    parser.add_argument('--dim', required=True, type=int, nargs="+", help='size of each dimension in mesh')
+    # parser.add_argument('--dim', required=True, type=int, nargs="+", help='size of each dimension in mesh')
 
     args = parser.parse_args()
 
-    cs_file = args.cs_file
+    # cs_file = args.cs_file
     link_yaml = args.link_yaml
-    cs_dir = args.cs_dir
+    # cs_dir = args.cs_dir
     xml_dir = args.xml_dir
-    dim = args.dim
+    #dim = args.dim
     
-    gen_xml_meshcs(cs_file, link_yaml, dim, cs_dir, xml_dir)
+    gen_xml_meshcs(link_yaml, xml_dir)
