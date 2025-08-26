@@ -34,6 +34,8 @@ def process_csv_to_matrix_txt(input_csv_path, output_txt_path, matrix_size=64):
                 # 行のデータをNumPy配列に変換
                 matrix_data = np.array(row.values)
 
+                matrix_data[matrix_data < 0] = 0
+
                 # 1次元配列を行列の形（例: 4x4）にreshape
                 reshaped_matrix = matrix_data.reshape(matrix_size, matrix_size)
 
