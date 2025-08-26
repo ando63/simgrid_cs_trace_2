@@ -114,3 +114,13 @@ if __name__ == "__main__":
     process_csv_to_matrix_txt(csv_file_path, txt_file_path, matrix_dimension)
 
     print(simulation_times_full_fat)
+    plt.figure(figsize=(12, 4))
+    plt.plot(simulation_times_full_fat, marker='o', markersize=3, linestyle='-')
+    plt.xlabel('Index')
+    plt.ylabel('Value')
+    plt.title('Array values from left to right')
+    plt.grid(True)
+    
+    # 画像として保存
+    plt.savefig("array_plot.png", dpi=300)  # dpi は解像度、必要に応じて調整
+    plt.close()  # メモリ解放のために閉じる
