@@ -101,7 +101,7 @@ if __name__ == "__main__":
     # CSVファイルのパス
     csv_file_path = "time_traffic_matrix.csv"
     # 出力テキストファイルのパス
-    txt_file_path = "matrix.txt"
+    txt_file_path = "traf_matrix/matrix.txt"
     
     # 実際に行列のサイズに合わせて変更してください
     # 例：4x4行列の場合は4
