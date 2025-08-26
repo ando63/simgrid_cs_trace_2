@@ -45,6 +45,7 @@ def process_csv_to_matrix_txt(input_csv_path, output_txt_path, matrix_size=64):
                 
                 # 各行列の間に空行を挿入して見やすくする
                 f.write('\n')
+                f.close()
 
                 # gen_traf
 
@@ -81,7 +82,7 @@ def process_csv_to_matrix_txt(input_csv_path, output_txt_path, matrix_size=64):
 
 
 
-                f.close()  # 一旦閉じる
+                # f.close()  # 一旦閉じる
                 open(output_txt_path, 'w').close()  # 中身を空にする
 
                 # 🔽 また追記モードで開き直す
