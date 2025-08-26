@@ -4,7 +4,8 @@ import os
 
 def gen_traffic(matrix_file, rate, matrix_dir):
     # read matrix file and get rank size
-    matrix = np.loadtxt(os.path.join(matrix_dir, matrix_file), dtype=float, delimiter='\t')
+    matrix = np.loadtxt(os.path.join(matrix_dir, matrix_file), dtype=float, delimiter=' ')
+    # matrix = np.loadtxt(os.path.join(matrix_dir, matrix_file), dtype=float, delimiter='\t')
     size = matrix.shape[0]
     # print(matrix)
     # print(size)
