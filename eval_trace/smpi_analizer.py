@@ -29,6 +29,7 @@ def process_csv_to_matrix_txt(input_csv_path, output_txt_path, matrix_size=64):
         with open(output_txt_path, 'w') as f:
             # 1行ずつ行列データを取り出す
             for _, row in df.iterrows():
+                print(row)
                 # 行のデータをNumPy配列に変換
                 matrix_data = np.array(row.values)
 
