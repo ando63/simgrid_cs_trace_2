@@ -4,6 +4,7 @@ import subprocess
 import re
 
 def process_csv_to_matrix_txt(input_csv_path, output_txt_path, matrix_size=64):
+    global simulation_times_full_fat
     """
     CSVファイルからタイムスタンプを除いた行列データを抽出し、
     指定された形式でテキストファイルに保存します。
@@ -96,6 +97,7 @@ def process_csv_to_matrix_txt(input_csv_path, output_txt_path, matrix_size=64):
 
 # スクリプトの実行例
 if __name__ == "__main__":
+    global simulation_times_full_fat
     # CSVファイルのパス
     csv_file_path = "time_traffic_matrix.csv"
     # 出力テキストファイルのパス
