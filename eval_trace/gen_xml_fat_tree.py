@@ -77,7 +77,10 @@ def gen_xml_meshcs(link_yaml, xml_dir):
             f.write("    <link id=\"link{}\" bandwidth=\"{}MBps\" latency=\"{}us\"/>\n".format(i, HR_bw, HR_lat))
 
         for i,j in G_fat_tree.edges:
-            f.write("    <link id=\"link{}-{}\" bandwidth=\"{}MBps\" latency=\"{}us\"/>\n".format(i, j, RR_bw, RR_lat))
+            if i >= 64 && j >= 64:
+                f.write("    <link id=\"link{}-{}\" bandwidth=\"{}MBps\" latency=\"{}us\"/>\n".format(i, j, RR_bw * 16, RR_lat))
+            else:
+              f.write("    <link id=\"link{}-{}\" bandwidth=\"{}MBps\" latency=\"{}us\"/>\n".format(i, j, RR_bw, RR_lat))
 
         for i in range(n_nodes):
             f.write("    <route src=\"host{}\" dst=\"router{}\"><link_ctn id=\"link{}\"/></route>\n".format(i, i, i))
