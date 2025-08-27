@@ -53,7 +53,7 @@ arival_result_queue = None
 start_result_queue = None
 
 # fig, ax = plt.subplots(figsize=(6, 6))
-fig, (ax_graph, ax_heatmap) = plt.subplots(1, 2, figsize=(18, 8), gridspec_kw={'width_ratios': [2, 1]}) # 左を広く、右を狭く
+fig, (ax_graph, ax_heatmap, ax_heatmap_64_64) = plt.subplots(1, 3, figsize=(18, 8), gridspec_kw={'width_ratios': [2, 1, 1]}) # 左を広く、右を狭く
 fig_gantt, ax_gantt = plt.subplots(figsize=(14, 8))
 
 
@@ -258,8 +258,8 @@ def initialize_all_jobs_list():
     data = PWA.data
     for i in range(len(data)):
         #     jobs[i] = (data["Requested Number of Processors"][i], data["Requested Time"][i]/k)
-        # jobs[i] = (data["Number of Allocated Processors"][i], data["Run Time"][i] / SPEED_UP_FACTOR, data["Submit Time"][i] / SPEED_UP_FACTOR, "submited_in_sim_time", "started_in_sim_time", "traffic_matrix", "use_nodes")
-        jobs[i] = (int(data["Number of Allocated Processors"][i]), data["Run Time"][i] / SPEED_UP_FACTOR, data["Submit Time"][i] / SPEED_UP_FACTOR, -1, -1, -1, -1)
+        # jobs[i] = (data["Number of Allocated Processors"][i], data["Run Time"][i] / SPEED_UP_FACTOR, data["Submit Time"][i] / SPEED_UP_FACTOR, "submited_in_sim_time", "started_in_sim_time", "traffic_matrix", "use_nodes", "64*64_traffic_matrix")
+        jobs[i] = (int(data["Number of Allocated Processors"][i]), data["Run Time"][i] / SPEED_UP_FACTOR, data["Submit Time"][i] / SPEED_UP_FACTOR, -1, -1, -1, -1, -1)
     # jobs = []
     # jobs.append(0, (4,800))
     # jobs.append(1, (2,400))
@@ -277,34 +277,17 @@ def initialize_all_jobs_list():
         pattern = re.compile(rf"flatten_matrix_(\w+)_A_{np_val}\.csv")
         benchmarks = []
         target_dir = "hpcsim_v3/traf_mat_flatten"
-
-        try:
-            files_in_dir = os.listdir(target_dir)
-            print(f"Target directory '{target_dir}' contains the following files:")
-            for f in files_in_dir:
-                print(f"  - {f}")
-            print("-" * 20)
-        except FileNotFoundError:
-            print(f"Error: The directory '{target_dir}' was not found.")
-            files_in_dir = []
-        
         for file in os.listdir(target_dir):
             match = pattern.match(file)
             if match:
                 benchmarks.append(match.group(1))
-
-        print(f"np_val: {np_val}")
-        print(f"Regex pattern: {pattern.pattern}")
-        print(f"Found benchmarks: {benchmarks}")
-        print("-" * 20)
-        
         selected_benchmark = random.choice(benchmarks)
         selected_file = f"{target_dir}/flatten_matrix_{selected_benchmark}_A_{np_val}.csv"
 
-        updated_job = (all_jobs[0][1][0], all_jobs[0][1][1], all_jobs[0][1][2], datetime.now(), -1, np.loadtxt(selected_file, delimiter=","), -1)
+        updated_job = (all_jobs[0][1][0], all_jobs[0][1][1], all_jobs[0][1][2], datetime.now(), -1, np.loadtxt(selected_file, delimiter=","), -1, np.loadtxt(selected_file, delimiter=","))
         all_jobs[0] = (0, updated_job)
     else:
-        updated_job = (all_jobs[0][1][0], all_jobs[0][1][1], all_jobs[0][1][2], datetime.now(), -1, -1, -1)
+        updated_job = (all_jobs[0][1][0], all_jobs[0][1][1], all_jobs[0][1][2], datetime.now(), -1, -1, -1, -1)
         all_jobs[0] = (0, updated_job)
 
 
@@ -355,11 +338,11 @@ def submit_jobs():
                 selected_benchmark = random.choice(benchmarks)
                 selected_file = f"{target_dir}/flatten_matrix_{selected_benchmark}_A_{np_val}.csv"
 
-                updated_job = (all_jobs[i][1][0], all_jobs[i][1][1], all_jobs[i][1][2], datetime.now(), -1, np.loadtxt(selected_file, delimiter=","), -1)
+                updated_job = (all_jobs[i][1][0], all_jobs[i][1][1], all_jobs[i][1][2], datetime.now(), -1, np.loadtxt(selected_file, delimiter=","), -1, np.loadtxt(selected_file, delimiter=","))
                 all_jobs[i] = (i, updated_job)
                 job_queue.append(all_jobs[i])
             else:
-                updated_job = (all_jobs[i][1][0], all_jobs[i][1][1], all_jobs[i][1][2], datetime.now(), -1, -1, -1)
+                updated_job = (all_jobs[i][1][0], all_jobs[i][1][1], all_jobs[i][1][2], datetime.now(), -1, -1, -1, -1)
                 all_jobs[i] = (i, updated_job)
                 job_queue.append(all_jobs[i])
             #arival_result_queue.append(datetime.datetime.now)
@@ -437,14 +420,15 @@ def divi(n, start=2):
 #     if(endx==endxx and endy==endyy):
 #         print datetime.datetime.now(), "job: ", job, "is finished"
 
-def unlock_unavailable(nl, job, traffic_matrix):
-    global current_traffic_matrix
+def unlock_unavailable(nl, job, traffic_matrix, traffic_matrix_64_64):
+    global current_traffic_matrix, current_traffic_matrix_64_64
     while (len(nl) > 0):
         RG.nodes[nl[0]]["ava"] = "yes"
         nodelist_to_draw.remove(nl[0])
         nl.pop(0)
     if isinstance(traffic_matrix, np.ndarray):
         current_traffic_matrix = current_traffic_matrix - traffic_matrix
+        current_traffic_matrix_64_64 = current_traffic_matrix_64_64 -traffic_matrix_64_64
     #print(datetime.datetime.now(), "job: ", job, "is finished")
 
 
@@ -558,7 +542,7 @@ def loop_allocate_all_jobs():
     global result_wait_sum
     global result_utility
     global all_jobs
-    global current_traffic_matrix
+    global current_traffic_matrix, current_traffic_matrix_64_64
  
     fso_not_found = False
     # global to_first
@@ -597,6 +581,7 @@ def loop_allocate_all_jobs():
     connect_matrix = generate_symmetric_matrix_varying_rowsums(capa_list)
 
     current_traffic_matrix = np.zeros((4, 4), dtype=float)
+    current_traffic_matrix_64_64 = np.zeros((64, 64), dtype=float)
 
     group_idle_counts = []
     group_large_ava_counts = []
@@ -2417,6 +2402,11 @@ def loop_allocate_all_jobs():
                 #traffic_matrix = np.zeros((first_cpu, first_cpu), dtype=float) # トラフィック行列をここにぶち込む
                 if first_cpu != 1:
                     traffic_matrix = job_queue[0][1][5]
+                    traffic_matrix_64_64 = np.zeros((64, 64))
+                    for i in range(len(ava_to_unava)):
+                        for j in range(len(ava_to_unava)):
+                            traffic_matrix_64_64[ava_to_unava[i]][ava_to_unava[j]] += traffic_matrix[i][j]
+                    # traffic_matrix = job_queue[0][1][5]
                     order = np.argsort(ava_to_unava)
                     old_to_new = np.empty_like(order)
                     old_to_new[order] = np.arange(len(ava_to_unava))
@@ -2500,16 +2490,17 @@ def loop_allocate_all_jobs():
                             traffic_matrix_permutated = traffic_matrix_permutated_row_col_sorted
                     
                     current_traffic_matrix = current_traffic_matrix + traffic_matrix_permutated
+                    current_traffic_matrix_64_64 = current_traffic_matrix_64_64 + traffic_matrix_64_64
 
                     #t = threading.Timer(first_time, unlock_unavailable,(ava_to_unava, first, traffic_matrix_permutated,))  # required processing time
                     #t.start()
 
                     print(job_queue[0])
                     
-                    updated_job_done = (job_queue[0][1][0], job_queue[0][1][1], job_queue[0][1][2], job_queue[0][1][3], datetime.now(), traffic_matrix_permutated, ava_to_unava)
+                    updated_job_done = (job_queue[0][1][0], job_queue[0][1][1], job_queue[0][1][2], job_queue[0][1][3], datetime.now(), traffic_matrix_permutated, ava_to_unava, traffic_matrix_64_64)
                     all_jobs[first_num] = (first_num, updated_job_done)
 
-                    t = threading.Timer(first_time, unlock_unavailable,(ava_to_unava.copy(), first, traffic_matrix_permutated,))  # required processing time
+                    t = threading.Timer(first_time, unlock_unavailable,(ava_to_unava.copy(), first, traffic_matrix_permutated, traffic_matrix_64_64,))  # required processing time
                     t.start()
 
                     print(job_queue[0])
@@ -2517,11 +2508,12 @@ def loop_allocate_all_jobs():
                 else:
                     #t = threading.Timer(first_time, unlock_unavailable,(ava_to_unava, first, -1,))  # required processing time
                     #t.start()
-                    updated_job_done = (job_queue[0][1][0], job_queue[0][1][1], job_queue[0][1][2], job_queue[0][1][3], datetime.now(), -1, ava_to_unava)
+                    updated_job_done = (job_queue[0][1][0], job_queue[0][1][1], job_queue[0][1][2], job_queue[0][1][3], datetime.now(), -1, ava_to_unava, -1)
                     print("HERE!!")
                     all_jobs[first_num] = (first_num, updated_job_done)
 
-                    t = threading.Timer(first_time, unlock_unavailable,(ava_to_unava.copy(), first, traffic_matrix_permutated,))  # required processing time
+                    t = threading.Timer(first_time, unlock_unavailable,(ava_to_unava.copy(), first, -1,-1,))
+                    # t = threading.Timer(first_time, unlock_unavailable,(ava_to_unava.copy(), first, traffic_matrix_permutated,))
                     t.start()
 
                     print(job_queue[0])
@@ -2821,9 +2813,10 @@ def simulation_main():
         draw_image()
 
     result_ave_wait = 0
-    global job_records, start_time, communication_volume
+    global job_records, start_time, communication_volume, communication_volume_64_64
     job_records = []
     communication_volume_array = []
+    communication_volume_array_64_64 = []
 
 
     for i in range(0, NUM_SIMULATION_JOBS - 1):
@@ -2837,9 +2830,12 @@ def simulation_main():
         result_ave_wait += wait_time_sub
         if isinstance(all_jobs[i][1][5], np.ndarray):
             communication_volume_array.append(all_jobs[i][1][5].sum() / 4)
+        if isinstance(all_jobs[i][1][7], np.ndarray):
+            communication_volume_array_64_64.append(all_jobs[i][1][7].sum() / 64)
+    communication_volume_64_64 = max(communication_volume_array_64_64)
     communication_volume = max(communication_volume_array)
 
-    global result_utility, end_time, fps, min_time, im, time_traffic_list
+    global result_utility, end_time, fps, min_time, im, im_64_64, time_traffic_list
     result_ave_wait /= NUM_SIMULATION_JOBS
     result_utility = result_utility * 100 / 64 / result_wait_sum
     print("", flush=True)
@@ -2882,12 +2878,25 @@ def simulation_main():
     ax_heatmap.set_xlabel("To Node")
     ax_heatmap.set_ylabel("From Node")
 
+    heatmap_node_64_64_labels = [f'node{i+1}' for i in range(64)]
+    ax_heatmap_64_64.set_xticks(np.arange(64))
+    ax_heatmap_64_64.set_yticks(np.arange(64))
+    ax_heatmap_64_64.set_xticklabels(heatmap_node_64_64_labels)
+    ax_heatmap_64_64.set_yticklabels(heatmap_node_64_64_labels)
+    ax_heatmap_64_64.set_title("Communication Matrix 64*64")
+    ax_heatmap_64_64.set_xlabel("To Node")
+    ax_heatmap_64_64.set_ylabel("From Node")
+
 
 
     initial_heatmap_data = np.zeros((4, 4))
+    initial_heatmap_data_64_64 = np.zeros((64, 64))
     im = ax_heatmap.imshow(initial_heatmap_data, cmap='viridis', origin='upper', vmin=0, vmax=communication_volume) # vmaxは通信量の最大値に応じて調整
+    im_64_64 = ax_heatmap_64_64.imshow(initial_heatmap_data_64_64, cmap='viridis', origin='upper', vmin=0, vmax=communication_volume_64_64)
     cbar = fig.colorbar(im, ax=ax_heatmap, orientation='vertical', fraction=0.046, pad=0.04)
+    cbar_64_64 = fig.colorbar(im_64_64, ax=ax_heatmap_64_64, orientation='vertical', fraction=0.046, pad=0.04)
     cbar.set_label('Communication Volume')
+    cbar_64_64.set_label('Communication Volume 64*64')
 
     # current_time_text = ax_graph.text(0.01, 0.99, '', transform=ax_graph.transAxes, va='top', ha='left', fontsize=12, bbox=dict(facecolor='white', alpha=0.8, edgecolor='none'))
 
@@ -2960,7 +2969,6 @@ def simulation_main():
     plt.close(fig_gantt) # オプション: 保存後、このFigureを閉じてメモリを解放
 
     anim.save('animation.gif', writer='pillow', fps=20, dpi=100)
-
     # plt.show()
 
     print("Node-based Gantt Chart script finished.")
@@ -2973,10 +2981,11 @@ def simulation_main():
         header = ['Time', 'Matrix']
         writer.writerow(header)
 
-        for time, comm_matrix in time_traffic_list:
+        for time, comm_matrix, comm_matrix_64_64 in time_traffic_list:
             row = [time]
             # 4x4行列を1次元にフラットにして追加
             row.extend(comm_matrix.flatten().tolist())
+            row.extend(comm_matrix_64_64.flatten().tolist())
             writer.writerow(row)
 
     # ガントチャート部分終了
@@ -3101,11 +3110,13 @@ def update_2(frame_idx):
 
     active_nodes_map = {} # {node_name: job_id}
     current_heatmap_data = np.zeros((4, 4)) # ヒートマップデータもクリアして初期化
+    current_heatmap_data_64_64 = np.zeros((64, 64))
 
     for job_id, job_info in job_records:
         start_dt = job_info[4]
         runtime = job_info[1] # seconds
         communication_matrix = job_info[5] # 4x4 matrix
+        communication_matrix_64_64 = job_info[7]
         nodes_for_job = job_info[6]
 
         end_dt = start_dt + timedelta(seconds=runtime)
@@ -3118,6 +3129,7 @@ def update_2(frame_idx):
             
             # ヒートマップのデータに通信行列を加算
             current_heatmap_data += communication_matrix
+            current_heatmap_data_64_64 += communication_matrix_64_64
 
     node_colors = []
     labels = {} # ラベルはアクティブなノードにのみjob_idを表示
@@ -3129,7 +3141,7 @@ def update_2(frame_idx):
             node_colors.append("lightgray") # 非アクティブなノードは灰色
             labels[n] = "" # 非アクティブなノードはラベルなし
 
-    time_traffic_set = [current_datetime, current_heatmap_data]
+    time_traffic_set = [current_datetime, current_heatmap_data, current_heatmap_data_64_64]
     time_traffic_list.append(time_traffic_set)
     # RG, pos はグローバルスコープで定義されているため、そのまま参照できます
     nx.draw_networkx(RG, pos=pos, ax=ax_graph, with_labels=True, labels=labels, # axをax_graphに変更
@@ -3138,6 +3150,7 @@ def update_2(frame_idx):
 
     # --- ヒートマップの更新 (ax_heatmapに対する処理) ---
     im.set_array(current_heatmap_data) # ヒートマップのデータを更新
+    im_64_64.set_array(current_heatmap_data_64_64)
 
     # blit=False の場合、戻り値は必須ではないですが、慣例として空リストを返すこともあります。
     return []
