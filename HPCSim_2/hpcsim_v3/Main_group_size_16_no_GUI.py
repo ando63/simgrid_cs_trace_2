@@ -2974,7 +2974,7 @@ def simulation_main():
     print("Node-based Gantt Chart script finished.")
     print(len(time_traffic_list))
 
-    output_csv_file = 'time_traffic_matrix.csv'
+    output_csv_file = 'eval_trace/time_traffic_matrix.csv'
     with open(output_csv_file, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
         # ヘッダー行（任意）
