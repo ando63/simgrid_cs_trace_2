@@ -80,7 +80,7 @@ def process_csv_to_matrix_txt(input_csv_path, output_txt_path, matrix_size=64):
 
                 # smpirun(with half.xml)
 
-                cmd = "smpirun -no-privatize -replay traf_matrix/matrix.txt_1 --log=replay.thresh:critical --log=no_loc -np 64 -platform xmlfiles/link_config.yaml_fat_treemesh_cs_file.xml ./replay/smpi_replay --log=smpi_config.thres:warning --log=xbt_cfg.thres:warning > Output_2.txt 2>&1"
+                cmd = "smpirun -no-privatize -replay traf_matrix/matrix.txt_1 --log=replay.thresh:critical --log=no_loc -np 64 -platform xmlfiles/link_config.yaml_half_fat_treemesh_cs_file.xml ./replay/smpi_replay --log=smpi_config.thres:warning --log=xbt_cfg.thres:warning > Output_2.txt 2>&1"
 
                 subprocess.run(cmd, shell=True, check=True)
 
