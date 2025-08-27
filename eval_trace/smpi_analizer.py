@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import subprocess
 import re
+import matplotlib.pyplot as plt
 
 def process_csv_to_matrix_txt(input_csv_path, output_txt_path, matrix_size=64):
     global simulation_times_full_fat
