@@ -1,8 +1,8 @@
 HR:
- bw: 5
+ bw: 50000
  lat: 0.5
 RR:
- bw: 5
+ bw: 5000
  lat: 0.5
 cs:
  bw: 200000
