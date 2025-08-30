@@ -108,6 +108,9 @@ def process_csv_to_matrix_txt(input_csv_path, output_txt_path, output_txt_path_2
                         if match:
                             # 数字部分を float に変換してリストに追加
                             simulation_times_half_fat.append(float(match.group(1)))
+
+                    if reshaped_matrix_4_4.sum() > 10000:
+                        exit()
     
                     # f.close()  # 一旦閉じる
                     open(output_txt_path, 'w').close()  # 中身を空にする
