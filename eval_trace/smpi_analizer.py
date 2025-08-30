@@ -111,9 +111,11 @@ def process_csv_to_matrix_txt(input_csv_path, output_txt_path, output_txt_path_2
     
                     # f.close()  # 一旦閉じる
                     open(output_txt_path, 'w').close()  # 中身を空にする
+                    open(output_txt_path_2, 'w').close()
     
                     # 🔽 また追記モードで開き直す
                     f = open(output_txt_path, 'a')
+                    f2 = open(output_txt_path_2, 'a')
             
     
             print(f"データの処理が完了しました。ファイル '{output_txt_path}' に保存されました。")
