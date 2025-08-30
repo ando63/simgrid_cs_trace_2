@@ -31,11 +31,9 @@ def gen_mesh(dim):
 
 def gen_fat_tree():
     G_fat_tree = nx.Graph()
-    G_fat_tree.add_nodes_from(range(0,69))
+    G_fat_tree.add_nodes_from(range(0,64))
     for i in range(0,64):
-        G_fat_tree.add_edge(i, (i // 16)  + 64)
-    for i in range(64,68):
-        G_fat_tree.add_edge(i,68)
+        G_fat_tree.add_edge(i, 64)
     return G_fat_tree
 
 def gen_xml_meshcs(link_yaml, xml_dir):
@@ -46,7 +44,7 @@ def gen_xml_meshcs(link_yaml, xml_dir):
     # print(G_cs.edges)
 
     n_nodes = 64
-    n_routers = 69
+    n_routers = 65
 
     # n_nodes = np.prod(dim)
     # print(n_nodes)
