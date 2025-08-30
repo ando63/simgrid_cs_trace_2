@@ -38,10 +38,10 @@ def process_csv_to_matrix_txt(input_csv_path, output_txt_path, output_txt_path_2
     
                     first_16_elements = row[:16]
                     remaining_elements = row[16:]
-                    matrix_data_4_4 = np.array(first_16_element.values)
+                    matrix_data_4_4 = np.array(first_16_elements.values)
                     matrix_data_4_4[matrix_data_4_4 < 0] = 0
     
-                    matrix_data_64_64 = np.array(remaining_element.values)
+                    matrix_data_64_64 = np.array(remaining_elements.values)
                     matrix_data_64_64[matrix_data_64_64 < 0] = 0
     
                     # 1次元配列を行列の形（例: 4x4）にreshape
