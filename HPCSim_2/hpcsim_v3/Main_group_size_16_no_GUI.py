@@ -276,7 +276,7 @@ def initialize_all_jobs_list():
         np_val = all_jobs[0][1][0]
         pattern = re.compile(rf"flatten_matrix_(\w+)_A_{np_val}\.csv")
         benchmarks = []
-        target_dir = "hpcsim_v3/traf_mat_flatten"
+        target_dir = "hpcsim_v3/traf_mat_flatten_reduced"
         for file in os.listdir(target_dir):
             match = pattern.match(file)
             if match:
@@ -309,7 +309,7 @@ def submit_jobs():
     np_val = all_jobs[0][1][0]
     pattern = re.compile(rf"flatten_matrix_(\w+)_A_{np_val}\.csv")
     benchmarks = []
-    target_dir = "hpcsim_v3/traf_mat_flatten"
+    target_dir = "hpcsim_v3/traf_mat_flatten_reduced"
     for file in os.listdir(target_dir):
         match = pattern.match(file)
         if match:
@@ -330,7 +330,7 @@ def submit_jobs():
                 np_val = all_jobs[i][1][0]
                 pattern = re.compile(rf"flatten_matrix_(\w+)_A_{np_val}\.csv")
                 benchmarks = []
-                target_dir = "hpcsim_v3/traf_mat_flatten"
+                target_dir = "hpcsim_v3/traf_mat_flatten_reduced"
                 for file in os.listdir(target_dir):
                     match = pattern.match(file)
                     if match:
