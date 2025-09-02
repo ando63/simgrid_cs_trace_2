@@ -542,7 +542,7 @@ def loop_allocate_all_jobs():
     global result_wait_sum
     global result_utility
     global all_jobs
-    global current_traffic_matrix, current_traffic_matrix_64_64
+    global current_traffic_matrix, current_traffic_matrix_64_64, scheduling_type
  
     fso_not_found = False
     # global to_first
@@ -2785,6 +2785,7 @@ def loop_allocate_all_jobs():
                     # print len(jobs_)
                     """
         elif (all_jobs_submitted == True):
+            scheduling_type = "random"
             break
 
 def draw_image():
@@ -2835,7 +2836,7 @@ def simulation_main():
     communication_volume_64_64 = max(communication_volume_array_64_64)
     communication_volume = max(communication_volume_array)
 
-    global result_utility, end_time, fps, min_time, im, im_64_64, time_traffic_list
+    global result_utility, end_time, fps, min_time, im, im_64_64, time_traffic_list, scheduling_type
     result_ave_wait /= NUM_SIMULATION_JOBS
     result_utility = result_utility * 100 / 64 / result_wait_sum
     print("", flush=True)
@@ -2965,10 +2966,10 @@ def simulation_main():
     plt.tight_layout() # rect引数を削除して自動調整に任せる
     plt.grid(axis='x', linestyle='--', alpha=0.7)
 
-    fig_gantt.savefig('gantt_chart.png', dpi=300, bbox_inches='tight') # 例: fig変数にFigureが格納されているとして
+    fig_gantt.savefig(f'gantt_chart_{scheduling_type}.png', dpi=300, bbox_inches='tight') # 例: fig変数にFigureが格納されているとして
     plt.close(fig_gantt) # オプション: 保存後、このFigureを閉じてメモリを解放
 
-    anim.save('animation.gif', writer='pillow', fps=20, dpi=100)
+    anim.save(f'animation_{scheduling_type}.gif', writer='pillow', fps=20, dpi=100)
     # plt.show()
 
     print("Node-based Gantt Chart script finished.")
